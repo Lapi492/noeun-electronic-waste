@@ -25,8 +25,10 @@ import {
   Mail,
 } from "lucide-react";
 
-import imgFace from "../imports/image-2.png";
-import imgPoses from "../imports/image-1.png";
+import imgSmile from "../assets/phonetori/phonetori_smile.png";
+import imgSmileShine from "../assets/phonetori/phonetori_smile_shine.png";
+import imgStanding from "../assets/phonetori/phonetori_standing.png";
+import imgTip from "../assets/phonetori/phonetori_tip.png";
 
 // ─── i18n ─────────────────────────────────────────────────────────────────────
 type Lang = "en" | "ko" | "hi";
@@ -382,31 +384,25 @@ function useLang() {
   return useContext(LangCtx);
 }
 
-// ─── Pontory Character Crops ──────────────────────────────────────────────────
-// 이미지 교체 시: import 경로만 변경하면 됩니다.
+// ─── Pontory Character Poses ────────────────────────────────────────────────────
+// 이미지 교체 시: 위쪽 import 경로만 변경하면 됩니다.
 
 function PontoryFace({ size = 40, radius = "50%" }: { size?: number; radius?: string }) {
   return (
-    <div style={{ width: size, height: size, borderRadius: radius, overflow: "hidden", flexShrink: 0, backgroundImage: `url(${imgFace})`, backgroundSize: "cover", backgroundPosition: "center" }} />
+    <div style={{ width: size, height: size, borderRadius: radius, overflow: "hidden", flexShrink: 0, backgroundImage: `url(${imgSmile})`, backgroundSize: "200% 200%", backgroundPosition: "50% 8%", backgroundRepeat: "no-repeat" }} />
   );
 }
 
 function PontoryNormal({ width = 100, height = 120 }: { width?: number; height?: number }) {
-  return (
-    <div style={{ width, height, backgroundImage: `url(${imgPoses})`, backgroundSize: "210% auto", backgroundPosition: "10% 65%", backgroundRepeat: "no-repeat" }} />
-  );
+  return <img src={imgStanding} alt="" style={{ width, height, objectFit: "contain" }} />;
 }
 
 function PontoryTips({ width = 80, height = 100 }: { width?: number; height?: number }) {
-  return (
-    <div style={{ width, height, backgroundImage: `url(${imgPoses})`, backgroundSize: "210% auto", backgroundPosition: "90% 60%", backgroundRepeat: "no-repeat" }} />
-  );
+  return <img src={imgTip} alt="" style={{ width, height, objectFit: "contain" }} />;
 }
 
 function PontoryWelcome({ width = 220, height = 220 }: { width?: number; height?: number }) {
-  return (
-    <div style={{ width, height, backgroundImage: `url(${imgPoses})`, backgroundSize: "220% auto", backgroundPosition: "8% 68%", backgroundRepeat: "no-repeat" }} />
-  );
+  return <img src={imgSmileShine} alt="" style={{ width, height, objectFit: "contain" }} />;
 }
 
 const DEFAULT_PHONE_NAME = "폰토리";
