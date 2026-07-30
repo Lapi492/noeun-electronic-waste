@@ -389,9 +389,8 @@ function LangSheet({ onClose }: { onClose: () => void }) {
 
 // ─── Screens ──────────────────────────────────────────────────────────────────
 
-function OnboardingScreen({ onDone }: { onDone: () => void }) {
+function OnboardingScreen({ name, onNameChange, onDone }: { name: string; onNameChange: (n: string) => void; onDone: () => void }) {
   const { t } = useLang();
-  const [name, setName] = useState("Sprout");
   return (
     <div style={{ background: C.bg }} className="flex flex-col h-full rounded-[32px] overflow-clip">
       <StatusBar />
@@ -405,10 +404,10 @@ function OnboardingScreen({ onDone }: { onDone: () => void }) {
         </div>
         <div style={{ background: "white", borderRadius: 16, border: `1.5px solid ${C.dark}` }} className="flex items-center gap-3 px-4 py-[14px]">
           <Pencil size={18} color={C.dark} />
-          <input value={name} onChange={(e) => setName(e.target.value)} placeholder={t.namePlaceholder}
+          <input value={name} onChange={(e) => onNameChange(e.target.value)} placeholder={t.namePlaceholder}
             style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontWeight: 500, fontSize: 16, color: C.darkAlt, background: "transparent", outline: "none", flex: 1 }} />
         </div>
-        <button onClick={onDone} style={{ background: C.dark, borderRadius: 16 }} className="w-full flex items-center justify-center py-[14px]">
+        <button onClick={() => { if (!name.trim()) onNameChange("Sprout"); onDone(); }} style={{ background: C.dark, borderRadius: 16 }} className="w-full flex items-center justify-center py-[14px]">
           <span style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontWeight: 700, fontSize: 16, color: "white" }}>{t.done}</span>
         </button>
       </div>
@@ -684,14 +683,14 @@ function SettingsScreen({ onNavigate }: { onNavigate: (tab: Tab) => void }) {
 // ─── App Root ─────────────────────────────────────────────────────────────────
 export default function App() {
   const [screen, setScreen] = useState<"onboarding" | Tab>("onboarding");
-  const [phoneName] = useState("Sprout");
+  const [phoneName, setPhoneName] = useState("Sprout");
   const [lang, setLang] = useState<Lang>("ko");
 
   return (
     <LangCtx.Provider value={{ t: T[lang], lang, setLang }}>
       <div className="size-full flex items-center justify-center" style={{ background: "#2a3d2e", minHeight: "100vh" }}>
         <div style={{ width: 390, height: 844, position: "relative", borderRadius: 32, overflow: "hidden", boxShadow: "0 32px 80px rgba(0,0,0,0.4)" }}>
-          {screen === "onboarding" && <OnboardingScreen onDone={() => setScreen("home")} />}
+          {screen === "onboarding" && <OnboardingScreen name={phoneName} onNameChange={setPhoneName} onDone={() => setScreen("home")} />}
           {screen === "home"       && <HomeScreen phoneName={phoneName} onNavigate={setScreen} />}
           {screen === "myphone"    && <MyPhoneScreen phoneName={phoneName} onNavigate={setScreen} />}
           {screen === "impact"     && <ImpactScreen onNavigate={setScreen} />}
