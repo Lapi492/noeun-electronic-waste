@@ -1,0 +1,638 @@
+import { useState, createContext, useContext } from "react";
+import {
+  Home,
+  Smartphone,
+  Leaf,
+  Image as ImageIcon,
+  Settings,
+  Battery,
+  Activity,
+  Cpu,
+  Database,
+  Thermometer,
+  Droplets,
+  Cloud,
+  Anchor,
+  Trash2,
+  Trees,
+  Bell,
+  Globe,
+  Eye,
+  Lock,
+  HelpCircle,
+  ChevronRight,
+  Pencil,
+  Check,
+} from "lucide-react";
+
+import imgFace from "../imports/image-2.png";
+import imgPoses from "../imports/image-1.png";
+
+// ─── i18n ─────────────────────────────────────────────────────────────────────
+type Lang = "en" | "ko";
+
+const T = {
+  en: {
+    // Onboarding
+    nameYourPhone: "Name your phone",
+    nameSubtitle: "Give your tech a personality. Naming it helps you treat it like a companion, not just a tool.",
+    namePlaceholder: "Name your phone...",
+    done: "Done",
+    // Home
+    goodMorning: "Good morning,",
+    helloFriend: "Hello, Friend",
+    sproutSpeech: (n: string) => `"Hi, I'm ${n}!"`,
+    sproutMessage: "I'm feeling cozy today! Let's keep my battery fresh and stretch our legs for wellness.",
+    todaysMission: "Today's Mission",
+    missionSub: "Complete these companion goals to boost wellness.",
+    battery: "Battery",
+    batteryTip: "Unplug now for optimal life",
+    streak: "Streak",
+    streakDays: "Days",
+    streakTip: "Keep it up! Stretch your legs",
+    // My Phone
+    myPhone: "MY Phone",
+    healthLabel: (n: string) => `${n}'s Health`,
+    healthState: "Optimal Performance State",
+    batteryStatus: "Battery Status",
+    batteryVal: "Excellent (82%)",
+    systemPerf: "System Performance",
+    systemVal: "Smooth",
+    storage: "Storage Saved",
+    storageVal: "24 GB free",
+    temp: "Phone Temperature",
+    tempVal: "Cool (32°C)",
+    tipsBtn: "Tips for you",
+    // Impact
+    yourImpact: "Your Impact",
+    impactHero: "By optimizing your phone care, you are reducing carbon emissions and keeping raw minerals in the ground.",
+    thisMonth: "This Month",
+    allTime: "All Time",
+    waterSaved: "Water Saved",
+    co2: "CO₂ Reduced",
+    materials: "Raw Materials Saved",
+    ewaste: "E-waste Avoided",
+    trees: "Trees Saved",
+    // Memories
+    memories: "Memories",
+    ourStory: "Our Story",
+    gallery: "Gallery",
+    storyTitle: "2 Years Together",
+    storySince: "Since October 14, 2024",
+    storyText: (n: string) =>
+      `Remember when ${n} survived that coffee spill? We dried ${n} with eco towels and kept going. You've saved 24kg of potential carbon by keeping ${n} in active use!`,
+    // Settings
+    settings: "Settings",
+    profileName: "Eco Companion",
+    profileEmail: "eco.friend@sprout.earth",
+    edit: "Edit",
+    notifications: "Notification Settings",
+    language: "Language",
+    langCurrent: "English (US)",
+    accessibility: "Accessibility",
+    privacy: "Privacy & Data",
+    // Nav
+    navHome: "Home",
+    navMyPhone: "My Phone",
+    navImpact: "Impact",
+    navMemories: "Memories",
+    navSettings: "Settings",
+    // Lang picker
+    selectLang: "Select Language",
+    langEn: "English (US)",
+    langKo: "한국어",
+  },
+  ko: {
+    nameYourPhone: "폰 이름 짓기",
+    nameSubtitle: "기기에 개성을 불어넣어 보세요. 이름을 붙이면 단순한 도구가 아닌 동반자처럼 대하게 돼요.",
+    namePlaceholder: "폰 이름을 입력하세요...",
+    done: "완료",
+    goodMorning: "좋은 아침이에요,",
+    helloFriend: "안녕하세요!",
+    sproutSpeech: (n: string) => `"안녕, 나는 ${n}이야!"`,
+    sproutMessage: "오늘 기분이 아늑해요! 배터리를 아끼고 스트레칭으로 건강을 챙겨볼까요.",
+    todaysMission: "오늘의 미션",
+    missionSub: "목표를 달성해서 동반자의 건강을 지켜주세요.",
+    battery: "배터리",
+    batteryTip: "지금 충전기를 빼면 배터리 수명이 늘어요",
+    streak: "연속 달성",
+    streakDays: "일",
+    streakTip: "잘하고 있어요! 스트레칭도 해볼까요",
+    myPhone: "내 폰",
+    healthLabel: (n: string) => `${n}의 건강 상태`,
+    healthState: "최적 성능 상태",
+    batteryStatus: "배터리 상태",
+    batteryVal: "우수 (82%)",
+    systemPerf: "시스템 성능",
+    systemVal: "원활함",
+    storage: "절약된 저장공간",
+    storageVal: "24 GB 여유",
+    temp: "폰 온도",
+    tempVal: "시원함 (32°C)",
+    tipsBtn: "맞춤 팁 보기",
+    yourImpact: "나의 환경 임팩트",
+    impactHero: "폰을 잘 관리하면 탄소 배출을 줄이고 희귀 광물 채굴을 막을 수 있어요.",
+    thisMonth: "이번 달",
+    allTime: "누적",
+    waterSaved: "절약한 물",
+    co2: "줄인 CO₂",
+    materials: "절약한 원자재",
+    ewaste: "줄인 전자 폐기물",
+    trees: "살린 나무",
+    memories: "추억",
+    ourStory: "우리의 이야기",
+    gallery: "갤러리",
+    storyTitle: "함께한 2년",
+    storySince: "2024년 10월 14일부터",
+    storyText: (n: string) =>
+      `${n}가 커피를 쏟고도 살아남았던 거 기억나요? 에코 수건으로 닦아내고 함께 이겨냈죠. ${n}를 계속 사용한 덕분에 탄소 24kg을 절약했어요!`,
+    settings: "설정",
+    profileName: "에코 동반자",
+    profileEmail: "eco.friend@sprout.earth",
+    edit: "편집",
+    notifications: "알림 설정",
+    language: "언어",
+    langCurrent: "한국어",
+    accessibility: "접근성",
+    privacy: "개인정보 및 데이터",
+    navHome: "홈",
+    navMyPhone: "내 폰",
+    navImpact: "임팩트",
+    navMemories: "추억",
+    navSettings: "설정",
+    selectLang: "언어 선택",
+    langEn: "English (US)",
+    langKo: "한국어",
+  },
+} as const;
+
+type Strings = typeof T.en;
+
+const LangCtx = createContext<{ t: Strings; lang: Lang; setLang: (l: Lang) => void }>({
+  t: T.ko,
+  lang: "ko",
+  setLang: () => {},
+});
+
+function useLang() {
+  return useContext(LangCtx);
+}
+
+// ─── Pontory Character Crops ──────────────────────────────────────────────────
+// 이미지 교체 시: import 경로만 변경하면 됩니다.
+
+function PontoryFace({ size = 40, radius = "50%" }: { size?: number; radius?: string }) {
+  return (
+    <div style={{ width: size, height: size, borderRadius: radius, overflow: "hidden", flexShrink: 0, backgroundImage: `url(${imgFace})`, backgroundSize: "cover", backgroundPosition: "center" }} />
+  );
+}
+
+function PontoryNormal({ width = 100, height = 120 }: { width?: number; height?: number }) {
+  return (
+    <div style={{ width, height, backgroundImage: `url(${imgPoses})`, backgroundSize: "210% auto", backgroundPosition: "10% 65%", backgroundRepeat: "no-repeat" }} />
+  );
+}
+
+function PontoryTips({ width = 80, height = 100 }: { width?: number; height?: number }) {
+  return (
+    <div style={{ width, height, backgroundImage: `url(${imgPoses})`, backgroundSize: "210% auto", backgroundPosition: "90% 60%", backgroundRepeat: "no-repeat" }} />
+  );
+}
+
+function PontoryWelcome({ width = 220, height = 220 }: { width?: number; height?: number }) {
+  return (
+    <div style={{ width, height, backgroundImage: `url(${imgPoses})`, backgroundSize: "220% auto", backgroundPosition: "8% 68%", backgroundRepeat: "no-repeat" }} />
+  );
+}
+
+// ─── Design tokens ────────────────────────────────────────────────────────────
+const C = {
+  bg: "#f4f8f5",
+  dark: "#1c3524",
+  darkAlt: "#1a2e1f",
+  muted: "#5c6b5e",
+  green: "#e8f2ec",
+  border: "#e2ece6",
+  orange: "#e29578",
+};
+
+// ─── Status Bar ───────────────────────────────────────────────────────────────
+function StatusBar() {
+  return (
+    <div className="h-[44px] flex items-center justify-between px-6 shrink-0">
+      <span style={{ color: C.darkAlt, fontFamily: "Figtree", fontWeight: 600, fontSize: 15 }}>9:41</span>
+      <div className="flex items-center gap-1">
+        <svg width="17" height="11" viewBox="0 0 17 11" fill="none">
+          <path fillRule="evenodd" clipRule="evenodd" d="M0 11h2V6H0v5zm3 0h2V4H3v7zm3 0h2V2H6v9zm3 0h2V0H9v11zm3 0h2V0h-2v11zm3 0h2V0h-2v11z" fill={C.darkAlt} />
+        </svg>
+        <svg width="15" height="11" viewBox="0 0 15 11" fill="none">
+          <path fillRule="evenodd" clipRule="evenodd" d="M7.5 2.2C9.9 2.2 12 3.2 13.5 4.8L15 3.2C13.1 1.2 10.4 0 7.5 0S1.9 1.2 0 3.2l1.5 1.6C3 3.2 5.1 2.2 7.5 2.2zm0 3.6c1.4 0 2.7.6 3.6 1.5L12.6 6c-1.3-1.3-3.1-2.1-5.1-2.1S3.7 4.7 2.4 6l1.5 1.3C4.8 6.4 6.1 5.8 7.5 5.8zm0 3.5c.8 0 1.5.3 2 .8L11 8.6C10.1 7.6 8.9 7 7.5 7S4.9 7.6 4 8.6l1.5 1.5c.5-.5 1.2-.8 2-.8z" fill={C.darkAlt} />
+        </svg>
+        <svg width="25" height="12" viewBox="0 0 25 12" fill="none">
+          <rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke={C.darkAlt} />
+          <rect x="2" y="2" width="18" height="8" rx="2" fill={C.darkAlt} />
+          <path d="M23 4v4a2 2 0 000-4z" fill={C.darkAlt} />
+        </svg>
+      </div>
+    </div>
+  );
+}
+
+// ─── Bottom Nav ───────────────────────────────────────────────────────────────
+type Tab = "home" | "myphone" | "impact" | "memories" | "settings";
+
+function BottomNav({ active, onNavigate }: { active: Tab; onNavigate: (tab: Tab) => void }) {
+  const { t } = useLang();
+  const items: { id: Tab; label: string; Icon: React.FC<{ size?: number; strokeWidth?: number; color?: string }> }[] = [
+    { id: "home",     label: t.navHome,     Icon: Home },
+    { id: "myphone",  label: t.navMyPhone,  Icon: Smartphone },
+    { id: "impact",   label: t.navImpact,   Icon: Leaf },
+    { id: "memories", label: t.navMemories, Icon: ImageIcon },
+    { id: "settings", label: t.navSettings, Icon: Settings },
+  ];
+  return (
+    <div style={{ background: "white", borderTop: `1px solid ${C.border}` }} className="h-[80px] flex items-center justify-between px-4 pt-3 pb-5 shrink-0">
+      {items.map(({ id, label, Icon }) => {
+        const on = active === id;
+        return (
+          <button key={id} onClick={() => onNavigate(id)} className="flex flex-col items-center gap-1 w-[64px]">
+            <div style={{ background: on ? C.green : "transparent", borderRadius: 18, width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Icon size={20} strokeWidth={2} color={on ? C.dark : C.muted} />
+            </div>
+            <span style={{ fontFamily: "Figtree", fontWeight: on ? 700 : 500, fontSize: 10, color: on ? C.dark : C.muted, whiteSpace: "nowrap" }}>
+              {label}
+            </span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+// ─── Language Picker Bottom Sheet ─────────────────────────────────────────────
+function LangSheet({ onClose }: { onClose: () => void }) {
+  const { t, lang, setLang } = useLang();
+  const opts: { value: Lang; primary: string; secondary: string }[] = [
+    { value: "en", primary: "English", secondary: "English (US)" },
+    { value: "ko", primary: "한국어", secondary: "Korean" },
+  ];
+  return (
+    <>
+      <div onClick={onClose} style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.4)", zIndex: 20, borderRadius: 32 }} />
+      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, background: "white", borderRadius: "24px 24px 32px 32px", zIndex: 21, padding: "0 24px 44px" }}>
+        {/* drag handle */}
+        <div style={{ width: 40, height: 4, background: C.border, borderRadius: 2, margin: "16px auto 24px" }} />
+        <p style={{ fontFamily: "'Bricolage Grotesque'", fontWeight: 800, fontSize: 20, color: C.dark, marginBottom: 16 }}>
+          {t.selectLang}
+        </p>
+        <div className="flex flex-col gap-3">
+          {opts.map(({ value, primary, secondary }) => {
+            const selected = lang === value;
+            return (
+              <button
+                key={value}
+                onClick={() => { setLang(value); onClose(); }}
+                style={{
+                  background: selected ? C.green : "#f9faf9",
+                  border: `1.5px solid ${selected ? C.dark : C.border}`,
+                  borderRadius: 16,
+                  padding: "14px 16px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  width: "100%",
+                }}
+              >
+                <div style={{ textAlign: "left" }}>
+                  <p style={{ fontFamily: "Figtree", fontWeight: 700, fontSize: 16, color: C.dark }}>{primary}</p>
+                  <p style={{ fontFamily: "Figtree", fontSize: 13, color: C.muted }}>{secondary}</p>
+                </div>
+                {selected && (
+                  <div style={{ background: C.dark, borderRadius: "50%", width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <Check size={13} color="white" strokeWidth={3} />
+                  </div>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </>
+  );
+}
+
+// ─── Screens ──────────────────────────────────────────────────────────────────
+
+function OnboardingScreen({ onDone }: { onDone: () => void }) {
+  const { t } = useLang();
+  const [name, setName] = useState("Sprout");
+  return (
+    <div style={{ background: C.bg }} className="flex flex-col h-full rounded-[32px] overflow-clip">
+      <StatusBar />
+      <div className="flex-1 overflow-y-auto px-6 pb-4 flex flex-col gap-6 justify-center">
+        <div style={{ background: C.green, borderRadius: 24, height: 260, overflow: "hidden", display: "flex", alignItems: "flex-end", justifyContent: "center" }} className="shrink-0">
+          <PontoryWelcome width={260} height={240} />
+        </div>
+        <div className="flex flex-col gap-2 text-center">
+          <p style={{ fontFamily: "'Bricolage Grotesque'", fontWeight: 800, fontSize: 32, color: C.dark }}>{t.nameYourPhone}</p>
+          <p style={{ fontFamily: "Figtree", fontSize: 15, color: C.muted, lineHeight: 1.4 }}>{t.nameSubtitle}</p>
+        </div>
+        <div style={{ background: "white", borderRadius: 16, border: `1.5px solid ${C.dark}` }} className="flex items-center gap-3 px-4 py-[14px]">
+          <Pencil size={18} color={C.dark} />
+          <input value={name} onChange={(e) => setName(e.target.value)} placeholder={t.namePlaceholder}
+            style={{ fontFamily: "Figtree", fontWeight: 500, fontSize: 16, color: C.darkAlt, background: "transparent", outline: "none", flex: 1 }} />
+        </div>
+        <button onClick={onDone} style={{ background: C.dark, borderRadius: 16 }} className="w-full flex items-center justify-center py-[14px]">
+          <span style={{ fontFamily: "Figtree", fontWeight: 700, fontSize: 16, color: "white" }}>{t.done}</span>
+        </button>
+      </div>
+      <div aria-hidden className="absolute inset-0 rounded-[32px] border pointer-events-none" style={{ borderColor: C.border }} />
+    </div>
+  );
+}
+
+function HomeScreen({ phoneName, onNavigate }: { phoneName: string; onNavigate: (tab: Tab) => void }) {
+  const { t } = useLang();
+  return (
+    <div style={{ background: C.bg }} className="flex flex-col h-full rounded-[32px] overflow-clip">
+      <StatusBar />
+      <div className="flex-1 overflow-y-auto px-6 pb-4 flex flex-col gap-5">
+        {/* Greeting */}
+        <div className="flex items-center justify-between">
+          <div>
+            <p style={{ fontFamily: "Figtree", fontSize: 14, color: C.muted }}>{t.goodMorning}</p>
+            <p style={{ fontFamily: "'Bricolage Grotesque'", fontWeight: 800, fontSize: 24, color: C.dark }}>{t.helloFriend}</p>
+          </div>
+          <PontoryFace size={40} radius="20px" />
+        </div>
+        {/* Speech bubble */}
+        <div style={{ background: C.green, borderRadius: 24 }} className="p-5 flex flex-col gap-3">
+          <div>
+            <p style={{ fontFamily: "'Bricolage Grotesque'", fontWeight: 700, fontSize: 18, color: C.dark }}>{t.sproutSpeech(phoneName)}</p>
+            <p style={{ fontFamily: "Figtree", fontSize: 14, color: C.muted, lineHeight: 1.4, marginTop: 6 }}>{t.sproutMessage}</p>
+          </div>
+          <div style={{ height: 120, borderRadius: 16, overflow: "hidden", background: "white", display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
+            <PontoryNormal width={130} height={118} />
+          </div>
+        </div>
+        {/* Mission */}
+        <div>
+          <p style={{ fontFamily: "'Bricolage Grotesque'", fontWeight: 800, fontSize: 20, color: C.dark }}>{t.todaysMission}</p>
+          <p style={{ fontFamily: "Figtree", fontSize: 14, color: C.muted }}>{t.missionSub}</p>
+        </div>
+        <div className="flex gap-3">
+          <div style={{ background: "white", borderRadius: 20, flex: 1, boxShadow: "0 4px 6px rgba(26,46,31,0.04)" }} className="p-4 flex flex-col gap-3">
+            <div className="flex items-center gap-2">
+              <Battery size={20} color={C.dark} />
+              <span style={{ fontFamily: "Figtree", fontWeight: 600, fontSize: 13, color: C.muted }}>{t.battery}</span>
+            </div>
+            <p style={{ fontFamily: "'Bricolage Grotesque'", fontWeight: 800, fontSize: 28, color: C.dark }}>80%</p>
+            <p style={{ fontFamily: "Figtree", fontSize: 12, color: C.muted }}>{t.batteryTip}</p>
+          </div>
+          <div style={{ background: "#fdf0ea", borderRadius: 20, flex: 1, boxShadow: "0 4px 6px rgba(26,46,31,0.04)" }} className="p-4 flex flex-col gap-3">
+            <div className="flex items-center gap-2">
+              <Activity size={20} color={C.orange} />
+              <span style={{ fontFamily: "Figtree", fontWeight: 600, fontSize: 13, color: C.orange }}>{t.streak}</span>
+            </div>
+            <p style={{ fontFamily: "'Bricolage Grotesque'", fontWeight: 800, color: C.orange }}>
+              <span style={{ fontSize: 28 }}>5 </span>
+              <span style={{ fontSize: 14 }}>{t.streakDays}</span>
+            </p>
+            <p style={{ fontFamily: "Figtree", fontSize: 12, color: C.muted }}>{t.streakTip}</p>
+          </div>
+        </div>
+      </div>
+      <BottomNav active="home" onNavigate={onNavigate} />
+      <div aria-hidden className="absolute inset-0 rounded-[32px] border pointer-events-none" style={{ borderColor: C.border }} />
+    </div>
+  );
+}
+
+function MyPhoneScreen({ phoneName, onNavigate }: { phoneName: string; onNavigate: (tab: Tab) => void }) {
+  const { t } = useLang();
+  const stats = [
+    { icon: <Battery size={20} color={C.dark} />, label: t.batteryStatus, value: t.batteryVal },
+    { icon: <Cpu size={20} color={C.dark} />,     label: t.systemPerf,   value: t.systemVal },
+    { icon: <Database size={20} color={C.dark} />, label: t.storage,     value: t.storageVal },
+    { icon: <Thermometer size={20} color={C.dark} />, label: t.temp,     value: t.tempVal },
+  ];
+  return (
+    <div style={{ background: C.bg }} className="flex flex-col h-full rounded-[32px] overflow-clip">
+      <StatusBar />
+      <div className="flex-1 overflow-y-auto px-6 pb-4 flex flex-col gap-5">
+        <p style={{ fontFamily: "'Bricolage Grotesque'", fontWeight: 800, fontSize: 24, color: C.dark }}>{t.myPhone}</p>
+        {/* Health card */}
+        <div style={{ background: C.dark, borderRadius: 24 }} className="p-5 flex items-center gap-4">
+          <div className="flex-1">
+            <p style={{ fontFamily: "Figtree", fontWeight: 600, fontSize: 14, color: C.orange }}>{t.healthLabel(phoneName)}</p>
+            <p style={{ fontFamily: "'Bricolage Grotesque'", fontWeight: 800, fontSize: 36, color: "white" }}>92%</p>
+            <p style={{ fontFamily: "Figtree", fontSize: 12, color: C.green }}>{t.healthState}</p>
+          </div>
+          <div style={{ background: C.orange, borderRadius: 36, width: 72, height: 72, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            <div style={{ background: C.dark, borderRadius: 28, width: 56, height: 56, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <span style={{ fontFamily: "Figtree", fontWeight: 700, fontSize: 14, color: "white" }}>A+</span>
+            </div>
+          </div>
+        </div>
+        {/* Stats */}
+        <div className="flex flex-col gap-3">
+          {stats.map(({ icon, label, value }) => (
+            <div key={label} style={{ background: "white", borderRadius: 16, boxShadow: "0 4px 6px rgba(26,46,31,0.04)" }} className="flex items-center justify-between p-4">
+              <div className="flex items-center gap-3">{icon}<span style={{ fontFamily: "Figtree", fontWeight: 600, fontSize: 15, color: C.darkAlt }}>{label}</span></div>
+              <div className="flex items-center gap-2">
+                <span style={{ fontFamily: "Figtree", fontSize: 14, color: C.muted }}>{value}</span>
+                <ChevronRight size={16} color={C.muted} />
+              </div>
+            </div>
+          ))}
+        </div>
+        {/* Tips */}
+        <div className="flex items-end gap-3">
+          <div style={{ flexShrink: 0, marginBottom: -4 }}><PontoryTips width={64} height={80} /></div>
+          <button style={{ background: C.green, borderRadius: 16, border: `1px solid ${C.dark}`, flex: 1 }} className="flex items-center justify-center gap-3 p-4">
+            <HelpCircle size={20} color={C.dark} />
+            <span style={{ fontFamily: "Figtree", fontWeight: 700, fontSize: 15, color: C.dark }}>{t.tipsBtn}</span>
+          </button>
+        </div>
+      </div>
+      <BottomNav active="myphone" onNavigate={onNavigate} />
+      <div aria-hidden className="absolute inset-0 rounded-[32px] border pointer-events-none" style={{ borderColor: C.border }} />
+    </div>
+  );
+}
+
+function ImpactScreen({ onNavigate }: { onNavigate: (tab: Tab) => void }) {
+  const { t } = useLang();
+  const metrics = [
+    { icon: <Droplets size={20} color={C.dark} />, label: t.waterSaved,  value: "45 L" },
+    { icon: <Cloud size={20} color={C.dark} />,    label: t.co2,         value: "12.4 kg" },
+    { icon: <Anchor size={20} color={C.dark} />,   label: t.materials,   value: "1.2 kg" },
+    { icon: <Trash2 size={20} color={C.dark} />,   label: t.ewaste,      value: "350 g" },
+  ];
+  return (
+    <div style={{ background: C.bg }} className="flex flex-col h-full rounded-[32px] overflow-clip">
+      <StatusBar />
+      <div className="flex-1 overflow-y-auto px-6 pb-4 flex flex-col gap-5">
+        <p style={{ fontFamily: "'Bricolage Grotesque'", fontWeight: 800, fontSize: 24, color: C.dark }}>{t.yourImpact}</p>
+        {/* Hero */}
+        <div style={{ background: C.green, borderRadius: 24 }} className="px-5 pt-5 flex items-end gap-2">
+          <p style={{ fontFamily: "Figtree", fontSize: 14, color: C.muted, lineHeight: 1.4, flex: 1, paddingBottom: 20 }}>{t.impactHero}</p>
+          <PontoryNormal width={80} height={90} />
+        </div>
+        {/* This month */}
+        <div className="flex flex-col gap-3">
+          <p style={{ fontFamily: "'Bricolage Grotesque'", fontWeight: 700, fontSize: 18, color: C.dark }}>{t.thisMonth}</p>
+          <div className="flex flex-col gap-2">
+            {metrics.map(({ icon, label, value }) => (
+              <div key={label} style={{ background: "white", borderRadius: 16, boxShadow: "0 4px 6px rgba(26,46,31,0.04)" }} className="flex items-center justify-between p-4">
+                <div className="flex items-center gap-3">{icon}<span style={{ fontFamily: "Figtree", fontSize: 14, color: C.muted }}>{label}</span></div>
+                <span style={{ fontFamily: "'Bricolage Grotesque'", fontWeight: 800, fontSize: 16, color: C.dark }}>{value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        {/* All time */}
+        <div className="flex flex-col gap-3">
+          <p style={{ fontFamily: "'Bricolage Grotesque'", fontWeight: 700, fontSize: 18, color: C.dark }}>{t.allTime}</p>
+          <div style={{ background: "white", borderRadius: 16, boxShadow: "0 4px 6px rgba(26,46,31,0.04)" }} className="flex items-center justify-between p-4">
+            <div className="flex items-center gap-3"><Trees size={20} color={C.dark} /><span style={{ fontFamily: "Figtree", fontWeight: 600, fontSize: 15, color: C.darkAlt }}>{t.trees}</span></div>
+            <span style={{ fontFamily: "'Bricolage Grotesque'", fontWeight: 800, fontSize: 20, color: C.orange }}>2.4 Trees</span>
+          </div>
+        </div>
+      </div>
+      <BottomNav active="impact" onNavigate={onNavigate} />
+      <div aria-hidden className="absolute inset-0 rounded-[32px] border pointer-events-none" style={{ borderColor: C.border }} />
+    </div>
+  );
+}
+
+function MemoriesScreen({ phoneName, onNavigate }: { phoneName: string; onNavigate: (tab: Tab) => void }) {
+  const { t } = useLang();
+  const [tab, setTab] = useState<"story" | "gallery">("story");
+  const gridColors = ["#d4e8d8", "#c8e0cc", "#bcd8c0", "#b0d0b4"];
+  return (
+    <div style={{ background: C.bg }} className="flex flex-col h-full rounded-[32px] overflow-clip">
+      <StatusBar />
+      <div className="flex-1 overflow-y-auto px-6 pb-4 flex flex-col gap-5">
+        <p style={{ fontFamily: "'Bricolage Grotesque'", fontWeight: 800, fontSize: 24, color: C.dark }}>{t.memories}</p>
+        {/* Tab switcher */}
+        <div style={{ background: C.green, borderRadius: 16 }} className="flex p-1 gap-1">
+          {(["story", "gallery"] as const).map((id) => (
+            <button key={id} onClick={() => setTab(id)} style={{ flex: 1, borderRadius: 12, background: tab === id ? "white" : "transparent", padding: "10px 0" }}>
+              <span style={{ fontFamily: "Figtree", fontWeight: tab === id ? 700 : 500, fontSize: 14, color: tab === id ? C.dark : C.muted }}>
+                {id === "story" ? t.ourStory : t.gallery}
+              </span>
+            </button>
+          ))}
+        </div>
+        {tab === "story" ? (
+          <>
+            <div style={{ background: "white", borderRadius: 20, boxShadow: "0 4px 6px rgba(26,46,31,0.04)" }} className="p-4 flex flex-col gap-4">
+              <div>
+                <p style={{ fontFamily: "'Bricolage Grotesque'", fontWeight: 700, fontSize: 18, color: C.dark }}>{t.storyTitle}</p>
+                <p style={{ fontFamily: "Figtree", fontSize: 13, color: C.muted }}>{t.storySince}</p>
+              </div>
+              <div className="flex flex-col gap-2">
+                {[0, 2].map((offset) => (
+                  <div key={offset} className="flex gap-2">
+                    {[offset, offset + 1].map((i) => (
+                      <div key={i} style={{ flex: 1, height: 80, borderRadius: 12, background: gridColors[i], overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        {i === 1 ? <PontoryFace size={60} radius="12px" /> : <ImageIcon size={20} color={C.dark} opacity={0.25} />}
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div style={{ background: "white", borderRadius: 20, boxShadow: "0 4px 6px rgba(26,46,31,0.04)" }} className="p-4">
+              <p style={{ fontFamily: "Figtree", fontSize: 14, color: C.darkAlt, lineHeight: 1.5 }}>{t.storyText(phoneName)}</p>
+            </div>
+          </>
+        ) : (
+          <div className="flex flex-col gap-2">
+            {[0, 2].map((offset) => (
+              <div key={offset} className="flex gap-2">
+                {[offset, offset + 1].map((i) => (
+                  <div key={i} style={{ flex: 1, height: 120, borderRadius: 12, background: gridColors[i], display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <ImageIcon size={24} color={C.dark} opacity={0.25} />
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+      <BottomNav active="memories" onNavigate={onNavigate} />
+      <div aria-hidden className="absolute inset-0 rounded-[32px] border pointer-events-none" style={{ borderColor: C.border }} />
+    </div>
+  );
+}
+
+function SettingsScreen({ onNavigate }: { onNavigate: (tab: Tab) => void }) {
+  const { t, lang } = useLang();
+  const [showLang, setShowLang] = useState(false);
+
+  const items = [
+    { icon: <Bell size={20} color={C.dark} />,   label: t.notifications, value: null,            onPress: () => {} },
+    { icon: <Globe size={20} color={C.dark} />,  label: t.language,      value: t.langCurrent,   onPress: () => setShowLang(true) },
+    { icon: <Eye size={20} color={C.dark} />,    label: t.accessibility, value: null,            onPress: () => {} },
+    { icon: <Lock size={20} color={C.dark} />,   label: t.privacy,       value: null,            onPress: () => {} },
+  ];
+
+  return (
+    <div style={{ background: C.bg, position: "relative" }} className="flex flex-col h-full rounded-[32px] overflow-clip">
+      <StatusBar />
+      <div className="flex-1 overflow-y-auto px-6 pb-4 flex flex-col gap-6">
+        <p style={{ fontFamily: "'Bricolage Grotesque'", fontWeight: 800, fontSize: 24, color: C.dark }}>{t.settings}</p>
+        {/* Profile */}
+        <div style={{ background: "white", borderRadius: 20, boxShadow: "0 4px 6px rgba(26,46,31,0.04)" }} className="flex items-center gap-4 p-4">
+          <PontoryFace size={56} radius="28px" />
+          <div className="flex-1">
+            <p style={{ fontFamily: "'Bricolage Grotesque'", fontWeight: 700, fontSize: 18, color: C.darkAlt }}>{t.profileName}</p>
+            <p style={{ fontFamily: "Figtree", fontSize: 13, color: C.muted }}>{t.profileEmail}</p>
+          </div>
+          <div style={{ background: C.green, borderRadius: 12, padding: "8px 12px", flexShrink: 0 }}>
+            <span style={{ fontFamily: "Figtree", fontWeight: 700, fontSize: 13, color: C.dark }}>{t.edit}</span>
+          </div>
+        </div>
+        {/* Settings list */}
+        <div className="flex flex-col gap-3">
+          {items.map(({ icon, label, value, onPress }) => (
+            <button key={label} onClick={onPress} style={{ background: "white", borderRadius: 16, boxShadow: "0 4px 6px rgba(26,46,31,0.04)" }} className="flex items-center justify-between p-4 w-full text-left">
+              <div className="flex items-center gap-3">{icon}<span style={{ fontFamily: "Figtree", fontWeight: 600, fontSize: 15, color: C.darkAlt }}>{label}</span></div>
+              <div className="flex items-center gap-2">
+                {value && <span style={{ fontFamily: "Figtree", fontSize: 14, color: C.muted }}>{value}</span>}
+                <ChevronRight size={16} color={C.muted} />
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+      <BottomNav active="settings" onNavigate={onNavigate} />
+      <div aria-hidden className="absolute inset-0 rounded-[32px] border pointer-events-none" style={{ borderColor: C.border }} />
+      {showLang && <LangSheet onClose={() => setShowLang(false)} />}
+    </div>
+  );
+}
+
+// ─── App Root ─────────────────────────────────────────────────────────────────
+export default function App() {
+  const [screen, setScreen] = useState<"onboarding" | Tab>("onboarding");
+  const [phoneName] = useState("Sprout");
+  const [lang, setLang] = useState<Lang>("ko");
+
+  return (
+    <LangCtx.Provider value={{ t: T[lang], lang, setLang }}>
+      <div className="size-full flex items-center justify-center" style={{ background: "#2a3d2e", minHeight: "100vh" }}>
+        <div style={{ width: 390, height: 844, position: "relative", borderRadius: 32, overflow: "hidden", boxShadow: "0 32px 80px rgba(0,0,0,0.4)" }}>
+          {screen === "onboarding" && <OnboardingScreen onDone={() => setScreen("home")} />}
+          {screen === "home"       && <HomeScreen phoneName={phoneName} onNavigate={setScreen} />}
+          {screen === "myphone"    && <MyPhoneScreen phoneName={phoneName} onNavigate={setScreen} />}
+          {screen === "impact"     && <ImpactScreen onNavigate={setScreen} />}
+          {screen === "memories"   && <MemoriesScreen phoneName={phoneName} onNavigate={setScreen} />}
+          {screen === "settings"   && <SettingsScreen onNavigate={setScreen} />}
+        </div>
+      </div>
+    </LangCtx.Provider>
+  );
+}
