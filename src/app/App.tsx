@@ -409,13 +409,14 @@ const DEFAULT_PHONE_NAME = "폰토리";
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const C = {
-  bg: "#f4f8f5",
-  dark: "#1c3524",
-  darkAlt: "#1a2e1f",
-  muted: "#5c6b5e",
-  green: "#e8f2ec",
-  border: "#e2ece6",
-  orange: "#e29578",
+  bg: "#f6f5fc",
+  dark: "#241b4e",
+  darkAlt: "#2f2560",
+  muted: "#6f6b8a",
+  accent: "#6c5ce7",
+  tint: "#eeebfb",
+  border: "#e4e0f5",
+  orange: "#e2946b",
 };
 
 // ─── Status Bar ───────────────────────────────────────────────────────────────
@@ -459,10 +460,10 @@ function BottomNav({ active, onNavigate }: { active: Tab; onNavigate: (tab: Tab)
         const on = active === id;
         return (
           <button key={id} onClick={() => onNavigate(id)} className="flex flex-col items-center gap-1 w-[64px]">
-            <div style={{ background: on ? C.green : "transparent", borderRadius: 18, width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <Icon size={20} strokeWidth={2} color={on ? C.dark : C.muted} />
+            <div style={{ background: on ? C.tint : "transparent", borderRadius: 18, width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Icon size={20} strokeWidth={2} color={on ? C.accent : C.muted} />
             </div>
-            <span style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontWeight: on ? 700 : 500, fontSize: 10, color: on ? C.dark : C.muted, whiteSpace: "nowrap" }}>
+            <span style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontWeight: on ? 700 : 500, fontSize: 10, color: on ? C.accent : C.muted, whiteSpace: "nowrap" }}>
               {label}
             </span>
           </button>
@@ -507,8 +508,8 @@ function LangSheet({ onClose }: { onClose: () => void }) {
               key={value}
               onClick={() => { setLang(value); onClose(); }}
               style={{
-                background: selected ? C.green : "#f9faf9",
-                border: `1.5px solid ${selected ? C.dark : C.border}`,
+                background: selected ? C.tint : "#f9f8fd",
+                border: `1.5px solid ${selected ? C.accent : C.border}`,
                 borderRadius: 16,
                 padding: "14px 16px",
                 display: "flex",
@@ -522,7 +523,7 @@ function LangSheet({ onClose }: { onClose: () => void }) {
                 <p style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontSize: 13, color: C.muted }}>{secondary}</p>
               </div>
               {selected && (
-                <div style={{ background: C.dark, borderRadius: "50%", width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <div style={{ background: C.accent, borderRadius: "50%", width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                   <Check size={13} color="white" strokeWidth={3} />
                 </div>
               )}
@@ -541,8 +542,8 @@ function TipsSheet({ onClose }: { onClose: () => void }) {
     <BottomSheet title={t.tipsBtn} onClose={onClose}>
       <div className="flex flex-col gap-3">
         {t.tipsList.map((tip, i) => (
-          <div key={i} style={{ background: C.green, borderRadius: 16 }} className="flex items-start gap-3 p-4">
-            <div style={{ background: C.dark, borderRadius: "50%", width: 22, height: 22, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 1 }}>
+          <div key={i} style={{ background: C.tint, borderRadius: 16 }} className="flex items-start gap-3 p-4">
+            <div style={{ background: C.accent, borderRadius: "50%", width: 22, height: 22, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 1 }}>
               <span style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontWeight: 700, fontSize: 12, color: "white" }}>{i + 1}</span>
             </div>
             <p style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontSize: 14, color: C.darkAlt, lineHeight: 1.4 }}>{tip}</p>
@@ -563,7 +564,7 @@ function LetterSheet({ phoneName, onClose }: { phoneName: string; onClose: () =>
   ];
   return (
     <BottomSheet title={t.letterBtn} onClose={onClose}>
-      <div style={{ background: C.green, borderRadius: 20 }} className="p-5 flex flex-col gap-4">
+      <div style={{ background: C.tint, borderRadius: 20 }} className="p-5 flex flex-col gap-4">
         <div>
           <p style={{ fontFamily: "'Bricolage Grotesque', 'Noto Sans Devanagari', sans-serif", fontWeight: 700, fontSize: 16, color: C.dark }}>{t.letterSalutation(phoneName)}</p>
           <p style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontSize: 14, color: C.darkAlt, lineHeight: 1.5, marginTop: 8 }}>{t.letterBody(phoneName)}</p>
@@ -587,7 +588,7 @@ function ToggleRow({ label, value, onChange }: { label: string; value: boolean; 
   return (
     <button onClick={() => onChange(!value)} style={{ background: "white", borderRadius: 16, border: `1px solid ${C.border}` }} className="flex items-center justify-between p-4 w-full text-left">
       <span style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontWeight: 600, fontSize: 15, color: C.darkAlt }}>{label}</span>
-      <div style={{ width: 44, height: 26, borderRadius: 13, background: value ? C.dark : C.border, position: "relative", flexShrink: 0, transition: "background 0.15s" }}>
+      <div style={{ width: 44, height: 26, borderRadius: 13, background: value ? C.accent : C.border, position: "relative", flexShrink: 0, transition: "background 0.15s" }}>
         <div style={{ position: "absolute", top: 2, left: value ? 20 : 2, width: 22, height: 22, borderRadius: "50%", background: "white", transition: "left 0.15s" }} />
       </div>
     </button>
@@ -638,10 +639,10 @@ function PrivacySheet({ onClose }: { onClose: () => void }) {
         <p style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontSize: 14, color: C.darkAlt, lineHeight: 1.5 }}>{t.privacyBody}</p>
         <button
           onClick={() => setConfirmed(true)}
-          style={{ background: confirmed ? C.green : C.dark, borderRadius: 16, border: confirmed ? `1px solid ${C.dark}` : "none" }}
+          style={{ background: confirmed ? C.tint : C.accent, borderRadius: 16, border: confirmed ? `1px solid ${C.accent}` : "none" }}
           className="flex items-center justify-center p-4"
         >
-          <span style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontWeight: 700, fontSize: 15, color: confirmed ? C.dark : "white" }}>{t.privacyDeleteBtn}</span>
+          <span style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontWeight: 700, fontSize: 15, color: confirmed ? C.accent : "white" }}>{t.privacyDeleteBtn}</span>
         </button>
         {confirmed && (
           <p style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontSize: 13, color: C.muted, lineHeight: 1.4 }}>{t.privacyDeleteConfirm}</p>
@@ -659,19 +660,19 @@ function OnboardingScreen({ name, onNameChange, onDone, onSkip }: { name: string
     <div style={{ background: C.bg }} className="flex flex-col h-full rounded-[32px] overflow-clip">
       <StatusBar />
       <div className="flex-1 overflow-y-auto px-6 pb-4 flex flex-col gap-6 justify-center">
-        <div style={{ background: C.green, borderRadius: 24, height: 260, overflow: "hidden", display: "flex", alignItems: "flex-end", justifyContent: "center" }} className="shrink-0">
+        <div style={{ background: C.tint, borderRadius: 24, height: 260, overflow: "hidden", display: "flex", alignItems: "flex-end", justifyContent: "center" }} className="shrink-0">
           <PontoryWelcome width={260} height={240} />
         </div>
         <div className="flex flex-col gap-2 text-center">
           <p style={{ fontFamily: "'Bricolage Grotesque', 'Noto Sans Devanagari', sans-serif", fontWeight: 800, fontSize: 32, color: C.dark }}>{t.nameYourPhone}</p>
           <p style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontSize: 15, color: C.muted, lineHeight: 1.4 }}>{t.nameSubtitle}</p>
         </div>
-        <div style={{ background: "white", borderRadius: 16, border: `1.5px solid ${C.dark}` }} className="flex items-center gap-3 px-4 py-[14px]">
-          <Pencil size={18} color={C.dark} />
+        <div style={{ background: "white", borderRadius: 16, border: `1.5px solid ${C.accent}` }} className="flex items-center gap-3 px-4 py-[14px]">
+          <Pencil size={18} color={C.accent} />
           <input value={name} onChange={(e) => onNameChange(e.target.value)} placeholder={t.namePlaceholder}
             style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontWeight: 500, fontSize: 16, color: C.darkAlt, background: "transparent", outline: "none", flex: 1 }} />
         </div>
-        <button onClick={() => { if (!name.trim()) onNameChange(DEFAULT_PHONE_NAME); onDone(); }} style={{ background: C.dark, borderRadius: 16 }} className="w-full flex items-center justify-center py-[14px]">
+        <button onClick={() => { if (!name.trim()) onNameChange(DEFAULT_PHONE_NAME); onDone(); }} style={{ background: C.accent, borderRadius: 16 }} className="w-full flex items-center justify-center py-[14px]">
           <span style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontWeight: 700, fontSize: 16, color: "white" }}>{t.done}</span>
         </button>
         <button onClick={onSkip} className="w-full flex items-center justify-center py-2">
@@ -699,7 +700,7 @@ function HomeScreen({ phoneName, onNavigate }: { phoneName: string; onNavigate: 
           <PontoryFace size={40} radius="20px" />
         </div>
         {/* Character + tap-to-speak bubble */}
-        <div style={{ background: C.green, borderRadius: 24 }} className="p-5 flex flex-col items-center gap-3">
+        <div style={{ background: C.tint, borderRadius: 24 }} className="p-5 flex flex-col items-center gap-3">
           {showSpeech && (
             <div style={{ position: "relative", background: "white", borderRadius: 20 }} className="w-full p-4">
               <p style={{ fontFamily: "'Bricolage Grotesque', 'Noto Sans Devanagari', sans-serif", fontWeight: 700, fontSize: 18, color: C.dark }}>{t.sproutSpeech(phoneName)}</p>
@@ -720,7 +721,7 @@ function HomeScreen({ phoneName, onNavigate }: { phoneName: string; onNavigate: 
           <p style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontSize: 14, color: C.muted }}>{t.missionSub}</p>
         </div>
         <div className="flex gap-3">
-          <div style={{ background: "white", borderRadius: 20, flex: 1, boxShadow: "0 4px 6px rgba(26,46,31,0.04)" }} className="p-4 flex flex-col gap-3">
+          <div style={{ background: "white", borderRadius: 20, flex: 1, boxShadow: "0 4px 6px rgba(36,27,78,0.06)" }} className="p-4 flex flex-col gap-3">
             <div className="flex items-center gap-2">
               <Battery size={20} color={C.dark} />
               <span style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontWeight: 600, fontSize: 13, color: C.muted }}>{t.battery}</span>
@@ -728,7 +729,7 @@ function HomeScreen({ phoneName, onNavigate }: { phoneName: string; onNavigate: 
             <p style={{ fontFamily: "'Bricolage Grotesque', 'Noto Sans Devanagari', sans-serif", fontWeight: 800, fontSize: 28, color: C.dark }}>80%</p>
             <p style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontSize: 12, color: C.muted }}>{t.batteryTip}</p>
           </div>
-          <div style={{ background: "#fdf0ea", borderRadius: 20, flex: 1, boxShadow: "0 4px 6px rgba(26,46,31,0.04)" }} className="p-4 flex flex-col gap-3">
+          <div style={{ background: "#fbeff9", borderRadius: 20, flex: 1, boxShadow: "0 4px 6px rgba(36,27,78,0.06)" }} className="p-4 flex flex-col gap-3">
             <div className="flex items-center gap-2">
               <Activity size={20} color={C.orange} />
               <span style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontWeight: 600, fontSize: 13, color: C.orange }}>{t.streak}</span>
@@ -766,7 +767,7 @@ function MyPhoneScreen({ phoneName, onNavigate }: { phoneName: string; onNavigat
           <div className="flex-1">
             <p style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontWeight: 600, fontSize: 14, color: C.orange }}>{t.healthLabel(phoneName)}</p>
             <p style={{ fontFamily: "'Bricolage Grotesque', 'Noto Sans Devanagari', sans-serif", fontWeight: 800, fontSize: 36, color: "white" }}>92%</p>
-            <p style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontSize: 12, color: C.green }}>{t.healthState}</p>
+            <p style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontSize: 12, color: C.tint }}>{t.healthState}</p>
           </div>
           <div style={{ background: C.orange, borderRadius: 36, width: 72, height: 72, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
             <div style={{ background: C.dark, borderRadius: 28, width: 56, height: 56, display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -777,7 +778,7 @@ function MyPhoneScreen({ phoneName, onNavigate }: { phoneName: string; onNavigat
         {/* Stats */}
         <div className="flex flex-col gap-3">
           {stats.map(({ icon, label, value }) => (
-            <div key={label} style={{ background: "white", borderRadius: 16, boxShadow: "0 4px 6px rgba(26,46,31,0.04)" }} className="flex items-center justify-between p-4">
+            <div key={label} style={{ background: "white", borderRadius: 16, boxShadow: "0 4px 6px rgba(36,27,78,0.06)" }} className="flex items-center justify-between p-4">
               <div className="flex items-center gap-3">{icon}<span style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontWeight: 600, fontSize: 15, color: C.darkAlt }}>{label}</span></div>
               <div className="flex items-center gap-2">
                 <span style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontSize: 14, color: C.muted }}>{value}</span>
@@ -789,9 +790,9 @@ function MyPhoneScreen({ phoneName, onNavigate }: { phoneName: string; onNavigat
         {/* Tips */}
         <div className="flex items-end gap-3">
           <div style={{ flexShrink: 0, marginBottom: -4 }}><PontoryTips width={64} height={80} /></div>
-          <button onClick={() => setShowTips(true)} style={{ background: C.green, borderRadius: 16, border: `1px solid ${C.dark}`, flex: 1 }} className="flex items-center justify-center gap-3 p-4">
-            <HelpCircle size={20} color={C.dark} />
-            <span style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontWeight: 700, fontSize: 15, color: C.dark }}>{t.tipsBtn}</span>
+          <button onClick={() => setShowTips(true)} style={{ background: C.tint, borderRadius: 16, border: `1px solid ${C.accent}`, flex: 1 }} className="flex items-center justify-center gap-3 p-4">
+            <HelpCircle size={20} color={C.accent} />
+            <span style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontWeight: 700, fontSize: 15, color: C.accent }}>{t.tipsBtn}</span>
           </button>
         </div>
       </div>
@@ -810,14 +811,14 @@ function AwarenessScreen({ onNavigate }: { onNavigate: (screen: Screen) => void 
       <div className="flex-1 overflow-y-auto px-6 pb-4 flex flex-col gap-5">
         <p style={{ fontFamily: "'Bricolage Grotesque', 'Noto Sans Devanagari', sans-serif", fontWeight: 800, fontSize: 24, color: C.dark }}>{t.awarenessTitle}</p>
         {/* Hero */}
-        <div style={{ background: C.green, borderRadius: 24 }} className="px-5 pt-5 flex items-end gap-2">
+        <div style={{ background: C.tint, borderRadius: 24 }} className="px-5 pt-5 flex items-end gap-2">
           <p style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontSize: 14, color: C.muted, lineHeight: 1.4, flex: 1, paddingBottom: 20 }}>{t.awarenessIntro}</p>
           <PontoryNormal width={80} height={90} />
         </div>
         {/* Facts */}
         <div className="flex flex-col gap-3">
           {t.awarenessFacts.map((fact, i) => (
-            <div key={i} style={{ background: "white", borderRadius: 16, boxShadow: "0 4px 6px rgba(26,46,31,0.04)" }} className="flex items-start gap-3 p-4">
+            <div key={i} style={{ background: "white", borderRadius: 16, boxShadow: "0 4px 6px rgba(36,27,78,0.06)" }} className="flex items-start gap-3 p-4">
               <div style={{ background: C.dark, borderRadius: "50%", width: 8, height: 8, flexShrink: 0, marginTop: 7 }} />
               <p style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontSize: 14, color: C.darkAlt, lineHeight: 1.5 }}>{fact}</p>
             </div>
@@ -858,7 +859,7 @@ function RetirementScreen({ phoneName, onBack, onKeep }: { phoneName: string; on
         <p style={{ fontFamily: "'Bricolage Grotesque', 'Noto Sans Devanagari', sans-serif", fontWeight: 800, fontSize: 24, color: C.dark }}>{t.retirementTitle}</p>
 
         {/* Feature comparison */}
-        <div style={{ background: C.green, borderRadius: 20 }} className="p-5 flex flex-col gap-2">
+        <div style={{ background: C.tint, borderRadius: 20 }} className="p-5 flex flex-col gap-2">
           <p style={{ fontFamily: "'Bricolage Grotesque', 'Noto Sans Devanagari', sans-serif", fontWeight: 700, fontSize: 16, color: C.dark }}>{t.retirementCompareTitle}</p>
           <p style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontSize: 14, color: C.darkAlt, lineHeight: 1.5 }}>{t.retirementCompareBody(phoneName)}</p>
         </div>
@@ -868,7 +869,7 @@ function RetirementScreen({ phoneName, onBack, onKeep }: { phoneName: string; on
           <p style={{ fontFamily: "'Bricolage Grotesque', 'Noto Sans Devanagari', sans-serif", fontWeight: 700, fontSize: 18, color: C.dark }}>{t.retirementResourceTitle}</p>
           <div className="flex flex-col gap-2">
             {resources.map(({ icon, label, value }) => (
-              <div key={label} style={{ background: "white", borderRadius: 16, boxShadow: "0 4px 6px rgba(26,46,31,0.04)" }} className="flex items-center justify-between p-4">
+              <div key={label} style={{ background: "white", borderRadius: 16, boxShadow: "0 4px 6px rgba(36,27,78,0.06)" }} className="flex items-center justify-between p-4">
                 <div className="flex items-center gap-3">{icon}<span style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontSize: 14, color: C.muted }}>{label}</span></div>
                 <span style={{ fontFamily: "'Bricolage Grotesque', 'Noto Sans Devanagari', sans-serif", fontWeight: 800, fontSize: 16, color: C.dark }}>{value}</span>
               </div>
@@ -879,7 +880,7 @@ function RetirementScreen({ phoneName, onBack, onKeep }: { phoneName: string; on
         {/* Memory retrospective */}
         <div className="flex flex-col gap-3">
           <p style={{ fontFamily: "'Bricolage Grotesque', 'Noto Sans Devanagari', sans-serif", fontWeight: 700, fontSize: 18, color: C.dark }}>{t.retirementMemoryTitle}</p>
-          <div style={{ background: "white", borderRadius: 16, boxShadow: "0 4px 6px rgba(26,46,31,0.04)" }} className="p-4">
+          <div style={{ background: "white", borderRadius: 16, boxShadow: "0 4px 6px rgba(36,27,78,0.06)" }} className="p-4">
             <p style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontSize: 14, color: C.darkAlt, lineHeight: 1.5 }}>{t.storyText(phoneName)}</p>
           </div>
         </div>
@@ -887,15 +888,15 @@ function RetirementScreen({ phoneName, onBack, onKeep }: { phoneName: string; on
         {/* Final confirmation */}
         <div style={{ background: C.dark, borderRadius: 20 }} className="p-5 flex flex-col gap-3">
           <p style={{ fontFamily: "'Bricolage Grotesque', 'Noto Sans Devanagari', sans-serif", fontWeight: 700, fontSize: 16, color: "white" }}>{t.retirementFinalTitle}</p>
-          <p style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontSize: 14, color: C.green, lineHeight: 1.5 }}>{t.retirementFinalBody(phoneName)}</p>
+          <p style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontSize: 14, color: C.tint, lineHeight: 1.5 }}>{t.retirementFinalBody(phoneName)}</p>
           <button onClick={onKeep} style={{ background: C.orange, borderRadius: 14 }} className="flex items-center justify-center py-3">
             <span style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontWeight: 700, fontSize: 14, color: "white" }}>{t.retirementKeepBtn(phoneName)}</span>
           </button>
           <button onClick={() => setShowContinueNote(true)} className="flex items-center justify-center py-1">
-            <span style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontWeight: 600, fontSize: 13, color: C.green, textDecoration: "underline" }}>{t.retirementContinueBtn}</span>
+            <span style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontWeight: 600, fontSize: 13, color: C.tint, textDecoration: "underline" }}>{t.retirementContinueBtn}</span>
           </button>
           {showContinueNote && (
-            <p style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontSize: 12, color: C.green, lineHeight: 1.4, opacity: 0.8 }}>{t.retirementContinueNote}</p>
+            <p style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontSize: 12, color: C.tint, lineHeight: 1.4, opacity: 0.8 }}>{t.retirementContinueNote}</p>
           )}
         </div>
       </div>
@@ -908,14 +909,14 @@ function MemoriesScreen({ phoneName, onNavigate }: { phoneName: string; onNaviga
   const { t } = useLang();
   const [tab, setTab] = useState<"story" | "gallery">("story");
   const [showLetter, setShowLetter] = useState(false);
-  const gridColors = ["#d4e8d8", "#c8e0cc", "#bcd8c0", "#b0d0b4"];
+  const gridColors = ["#e3ddf7", "#d6cef2", "#c9c0ed", "#bcb3e8"];
   return (
     <div style={{ background: C.bg }} className="flex flex-col h-full rounded-[32px] overflow-clip">
       <StatusBar />
       <div className="flex-1 overflow-y-auto px-6 pb-4 flex flex-col gap-5">
         <p style={{ fontFamily: "'Bricolage Grotesque', 'Noto Sans Devanagari', sans-serif", fontWeight: 800, fontSize: 24, color: C.dark }}>{t.memories}</p>
         {/* Tab switcher */}
-        <div style={{ background: C.green, borderRadius: 16 }} className="flex p-1 gap-1">
+        <div style={{ background: C.tint, borderRadius: 16 }} className="flex p-1 gap-1">
           {(["story", "gallery"] as const).map((id) => (
             <button key={id} onClick={() => setTab(id)} style={{ flex: 1, borderRadius: 12, background: tab === id ? "white" : "transparent", padding: "10px 0" }}>
               <span style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontWeight: tab === id ? 700 : 500, fontSize: 14, color: tab === id ? C.dark : C.muted }}>
@@ -926,7 +927,7 @@ function MemoriesScreen({ phoneName, onNavigate }: { phoneName: string; onNaviga
         </div>
         {tab === "story" ? (
           <>
-            <div style={{ background: "white", borderRadius: 20, boxShadow: "0 4px 6px rgba(26,46,31,0.04)" }} className="p-4 flex flex-col gap-4">
+            <div style={{ background: "white", borderRadius: 20, boxShadow: "0 4px 6px rgba(36,27,78,0.06)" }} className="p-4 flex flex-col gap-4">
               <div>
                 <p style={{ fontFamily: "'Bricolage Grotesque', 'Noto Sans Devanagari', sans-serif", fontWeight: 700, fontSize: 18, color: C.dark }}>{t.storyTitle}</p>
                 <p style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontSize: 13, color: C.muted }}>{t.storySince}</p>
@@ -943,7 +944,7 @@ function MemoriesScreen({ phoneName, onNavigate }: { phoneName: string; onNaviga
                 ))}
               </div>
             </div>
-            <div style={{ background: "white", borderRadius: 20, boxShadow: "0 4px 6px rgba(26,46,31,0.04)" }} className="p-4">
+            <div style={{ background: "white", borderRadius: 20, boxShadow: "0 4px 6px rgba(36,27,78,0.06)" }} className="p-4">
               <p style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontSize: 14, color: C.darkAlt, lineHeight: 1.5 }}>{t.storyText(phoneName)}</p>
             </div>
           </>
@@ -961,7 +962,7 @@ function MemoriesScreen({ phoneName, onNavigate }: { phoneName: string; onNaviga
           </div>
         )}
         {/* Letter from the device */}
-        <button onClick={() => setShowLetter(true)} style={{ background: C.dark, borderRadius: 16 }} className="flex items-center justify-center gap-3 p-4">
+        <button onClick={() => setShowLetter(true)} style={{ background: C.accent, borderRadius: 16 }} className="flex items-center justify-center gap-3 p-4">
           <Mail size={20} color="white" />
           <span style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontWeight: 700, fontSize: 15, color: "white" }}>{t.letterBtn}</span>
         </button>
@@ -998,7 +999,7 @@ function SettingsScreen({ phoneName, onNameChange, onNavigate }: { phoneName: st
       <div className="flex-1 overflow-y-auto px-6 pb-4 flex flex-col gap-6">
         <p style={{ fontFamily: "'Bricolage Grotesque', 'Noto Sans Devanagari', sans-serif", fontWeight: 800, fontSize: 24, color: C.dark }}>{t.settings}</p>
         {/* Profile */}
-        <div style={{ background: "white", borderRadius: 20, boxShadow: "0 4px 6px rgba(26,46,31,0.04)" }} className="flex items-center gap-4 p-4">
+        <div style={{ background: "white", borderRadius: 20, boxShadow: "0 4px 6px rgba(36,27,78,0.06)" }} className="flex items-center gap-4 p-4">
           <PontoryFace size={56} radius="28px" />
           <div className="flex-1 min-w-0">
             {editingName ? (
@@ -1008,21 +1009,21 @@ function SettingsScreen({ phoneName, onNameChange, onNavigate }: { phoneName: st
                 onChange={(e) => setNameDraft(e.target.value)}
                 onKeyDown={(e) => { if (e.key === "Enter") saveEdit(); }}
                 placeholder={t.namePlaceholderShort}
-                style={{ fontFamily: "'Bricolage Grotesque', 'Noto Sans Devanagari', sans-serif", fontWeight: 700, fontSize: 18, color: C.darkAlt, background: C.bg, border: `1.5px solid ${C.dark}`, borderRadius: 10, padding: "4px 10px", outline: "none", width: "100%" }}
+                style={{ fontFamily: "'Bricolage Grotesque', 'Noto Sans Devanagari', sans-serif", fontWeight: 700, fontSize: 18, color: C.darkAlt, background: C.bg, border: `1.5px solid ${C.accent}`, borderRadius: 10, padding: "4px 10px", outline: "none", width: "100%" }}
               />
             ) : (
               <p style={{ fontFamily: "'Bricolage Grotesque', 'Noto Sans Devanagari', sans-serif", fontWeight: 700, fontSize: 18, color: C.darkAlt }}>{phoneName}</p>
             )}
             <p style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontSize: 13, color: C.muted }}>{t.profileEmail}</p>
           </div>
-          <button onClick={editingName ? saveEdit : startEdit} style={{ background: C.green, borderRadius: 12, padding: "8px 12px", flexShrink: 0 }}>
+          <button onClick={editingName ? saveEdit : startEdit} style={{ background: C.tint, borderRadius: 12, padding: "8px 12px", flexShrink: 0 }}>
             <span style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontWeight: 700, fontSize: 13, color: C.dark }}>{editingName ? t.save : t.edit}</span>
           </button>
         </div>
         {/* Settings list */}
         <div className="flex flex-col gap-3">
           {items.map(({ icon, label, value, onPress }) => (
-            <button key={label} onClick={onPress} style={{ background: "white", borderRadius: 16, boxShadow: "0 4px 6px rgba(26,46,31,0.04)" }} className="flex items-center justify-between p-4 w-full text-left">
+            <button key={label} onClick={onPress} style={{ background: "white", borderRadius: 16, boxShadow: "0 4px 6px rgba(36,27,78,0.06)" }} className="flex items-center justify-between p-4 w-full text-left">
               <div className="flex items-center gap-3">{icon}<span style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontWeight: 600, fontSize: 15, color: C.darkAlt }}>{label}</span></div>
               <div className="flex items-center gap-2">
                 {value && <span style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontSize: 14, color: C.muted }}>{value}</span>}
@@ -1050,7 +1051,7 @@ export default function App() {
 
   return (
     <LangCtx.Provider value={{ t: T[lang], lang, setLang }}>
-      <div className="size-full flex items-center justify-center" style={{ background: "#2a3d2e", minHeight: "100vh" }}>
+      <div className="size-full flex items-center justify-center" style={{ background: "#1e1638", minHeight: "100vh" }}>
         <div style={{ width: 390, height: 844, position: "relative", borderRadius: 32, overflow: "hidden", boxShadow: "0 32px 80px rgba(0,0,0,0.4)" }}>
           {screen === "onboarding" && <OnboardingScreen name={phoneName} onNameChange={setPhoneName} onDone={() => setScreen("home")} onSkip={() => { setPhoneName(DEFAULT_PHONE_NAME); setScreen("home"); }} />}
           {screen === "home"       && <HomeScreen phoneName={phoneName} onNavigate={setScreen} />}
