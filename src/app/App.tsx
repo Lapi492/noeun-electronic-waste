@@ -29,6 +29,11 @@ import imgSmile from "../assets/phonetori/phonetori_smile.png";
 import imgSmileShine from "../assets/phonetori/phonetori_smile_shine.png";
 import imgStanding from "../assets/phonetori/phonetori_standing.png";
 import imgTip from "../assets/phonetori/phonetori_tip.png";
+import imgCryingLoud from "../assets/phonetori/phonetori_crying_loud.png";
+import memoryPhoto1 from "../assets/IMG_7381.jpeg";
+import memoryPhoto2 from "../assets/IMG_7400.jpeg";
+import memoryPhoto3 from "../assets/IMG_7407.jpeg";
+import memoryPhoto4 from "../assets/IMG_7417.jpeg";
 
 // ─── i18n ─────────────────────────────────────────────────────────────────────
 type Lang = "en" | "ko" | "hi";
@@ -375,8 +380,8 @@ const T = {
 type Strings = typeof T.en;
 
 const LangCtx = createContext<{ t: Strings; lang: Lang; setLang: (l: Lang) => void }>({
-  t: T.ko,
-  lang: "ko",
+  t: T.en,
+  lang: "en",
   setLang: () => {},
 });
 
@@ -708,8 +713,8 @@ function HomeScreen({ phoneName, onNavigate }: { phoneName: string; onNavigate: 
               <div style={{ position: "absolute", bottom: -8, left: "50%", width: 16, height: 16, background: "white", borderRadius: 3, transform: "translateX(-50%) rotate(45deg)" }} />
             </div>
           )}
-          <button onClick={() => setShowSpeech((s) => !s)} className="w-full flex items-end justify-center" style={{ height: 130 }} aria-label={t.tapHint}>
-            <PontoryNormal width={130} height={118} />
+          <button onClick={() => setShowSpeech((s) => !s)} className="w-full flex items-end justify-center" style={{ height: 130, overflow: "visible" }} aria-label={t.tapHint}>
+            <PontoryNormal width={152} height={138} />
           </button>
           {!showSpeech && (
             <p style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontSize: 12, color: C.muted }}>{t.tapHint}</p>
@@ -887,6 +892,7 @@ function RetirementScreen({ phoneName, onBack, onKeep }: { phoneName: string; on
 
         {/* Final confirmation */}
         <div style={{ background: C.dark, borderRadius: 20 }} className="p-5 flex flex-col gap-3">
+          <img src={imgCryingLoud} alt="" style={{ width: 96, height: 96, objectFit: "contain", alignSelf: "center" }} />
           <p style={{ fontFamily: "'Bricolage Grotesque', 'Noto Sans Devanagari', sans-serif", fontWeight: 700, fontSize: 16, color: "white" }}>{t.retirementFinalTitle}</p>
           <p style={{ fontFamily: "Figtree, 'Noto Sans Devanagari', sans-serif", fontSize: 14, color: C.tint, lineHeight: 1.5 }}>{t.retirementFinalBody(phoneName)}</p>
           <button onClick={onKeep} style={{ background: C.orange, borderRadius: 14 }} className="flex items-center justify-center py-3">
@@ -910,6 +916,7 @@ function MemoriesScreen({ phoneName, onNavigate }: { phoneName: string; onNaviga
   const [tab, setTab] = useState<"story" | "gallery">("story");
   const [showLetter, setShowLetter] = useState(false);
   const gridColors = ["#e3ddf7", "#d6cef2", "#c9c0ed", "#bcb3e8"];
+  const storyPhotos = [memoryPhoto1, memoryPhoto2, memoryPhoto3, memoryPhoto4];
   return (
     <div style={{ background: C.bg }} className="flex flex-col h-full rounded-[32px] overflow-clip">
       <StatusBar />
@@ -936,8 +943,8 @@ function MemoriesScreen({ phoneName, onNavigate }: { phoneName: string; onNaviga
                 {[0, 2].map((offset) => (
                   <div key={offset} className="flex gap-2">
                     {[offset, offset + 1].map((i) => (
-                      <div key={i} style={{ flex: 1, height: 80, borderRadius: 12, background: gridColors[i], overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                        {i === 1 ? <PontoryFace size={60} radius="12px" /> : <ImageIcon size={20} color={C.dark} opacity={0.25} />}
+                      <div key={i} style={{ flex: 1, height: 80, borderRadius: 12, background: gridColors[i], overflow: "hidden" }}>
+                        <img src={storyPhotos[i]} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                       </div>
                     ))}
                   </div>
@@ -1047,7 +1054,7 @@ function SettingsScreen({ phoneName, onNameChange, onNavigate }: { phoneName: st
 export default function App() {
   const [screen, setScreen] = useState<Screen>("onboarding");
   const [phoneName, setPhoneName] = useState(DEFAULT_PHONE_NAME);
-  const [lang, setLang] = useState<Lang>("ko");
+  const [lang, setLang] = useState<Lang>("en");
 
   return (
     <LangCtx.Provider value={{ t: T[lang], lang, setLang }}>
